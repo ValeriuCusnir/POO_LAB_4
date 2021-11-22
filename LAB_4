@@ -1,80 +1,75 @@
-#include <iostream> //main header file
-#include <stack>
+#include <bits/stdc++.h>
 using namespace std;
 
-void balance_parentheses();
-
-int main()
+// function to check if brackets are balanced
+bool areBracketsBalanced(string expr)
 {
-    int t;
+    stack<char> s;
+    char x;
 
-    cout << "Enter number of test cases:";
-    cin >> t;
-
-    for (int i = 0; i < t; i++) {
-        //calling of function for checking of brackets
-        balance_parentheses();
-    }
-
-    return 0;
-}
-
-void balance_parentheses()
-{
-    stack<char> a;
-    string s;
-    cout << "Enter string may or may not containing parentheses:";
-    cin >> s;
-
-    int flag = 0; //flag is an arbitrary variable
-
-    for (int i = 0; i < s.length(); i++)
-    //for length of the string calculated by number of letters
+    // Traversing the Expression
+    for (int i = 0; i < expr.length(); i++)
     {
-        if (s[i] == '{' || s[i] == '[' || s[i] == '(') {
-            //push function to enter terms in a stack
-            a.push(s[i]);
-            flag = 1;
+        if (expr[i] == '(' || expr[i] == '['
+            || expr[i] == '{')
+        {
+            // Push the element in the stack
+            s.push(expr[i]);
+            continue;
         }
-        if (!a.empty()) {
-            if (s[i] == '}') {
-                if (a.top() == '{')
-                // top of the stack
-                {
-                    a.pop();
-                    //pop function to delete terms from the top of array
-                    continue;
-                }
-                else
-                    break;
-            }
-            if (s[i] == ']') {
-                if (a.top() == '[') {
-                    a.pop();
-                    continue;
-                }
-                else
-                    break;
-            }
-            if (s[i] == ')') {
-                if (a.top() == '(') {
-                    a.pop();
-                    continue;
-                }
-                else
-                    break;
-            }
-        }
-        else {
+
+        // IF current current character is not opening
+        // bracket, then it must be closing. So stack
+        // cannot be empty at this point.
+        if (s.empty())
+            return false;
+
+        switch (expr[i]) {
+        case ')':
+
+            // Store the top element in a
+            x = s.top();
+            s.pop();
+            if (x == '{' || x == '[')
+                return false;
+            break;
+
+        case '}':
+
+            // Store the top element in b
+            x = s.top();
+            s.pop();
+            if (x == '(' || x == '[')
+                return false;
+            break;
+
+        case ']':
+
+            // Store the top element in c
+            x = s.top();
+            s.pop();
+            if (x == '(' || x == '{')
+                return false;
             break;
         }
     }
-int x = 2 * 4 + (3 +6 * 9 -    12 * (2*9 - 15))  + 2 +(-4)*((2 - 15));
-int y;
-int z;
-    if ((a.empty()) && (flag == 1))
-        cout << "Nu este corect" << endl;
+
+    // Check Empty Stack
+    return (s.empty());
+}
+
+// Driver code
+int main()
+{
+    int x;
+    string expr = "2 * 4 + (3 +6 * 9 -    12 * (2*9 - 15))  + 2 +(-4)*((2 - 15))";
+    x =2 * 4 + (3 +6 * 9 -    12 * (2*9 - 15))  + 2 +(-4)*((2 - 15));
+
+    // Function call
+    if (areBracketsBalanced(expr))
+        cout << "Balanced";
     else
-        cout << "Aceasta expresie este corecta" << endl;
-        cout <<"Expresia este egala cu : "<< x;
+        cout << "Not Balanced";
+        cout << "\nExpresia este egala cu :" <<x;
+    return 0;
 }
